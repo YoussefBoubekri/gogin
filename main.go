@@ -1,43 +1,20 @@
 package main
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
 )
 
-type Person struct {
-	FirstName string `xml:"FirstName,attr"`
-	LastName  string `xml:"LastName,attr"`
+type Recipe struct {
+	Name          string    `json:"Name"`
+	Tags          []string  `json:"Tags"`
+	Ingredients   []string  `json:"Ingredients"`
+	Instructions  []string  `json:"Instructions"`
+	DatePublished time.Time `json:"DatePublished"`
 }
 
-func index(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "hello World",
-	})
-}
-func person(c *gin.Context) {
-	c.XML(200, Person{FirstName: "Youssef", LastName: "Boubekri"})
-}
-func content(c *gin.Context) {
-	param := c.Params.ByName("type")
-	if param == "xml" {
-		c.XML(200, Person{FirstName: "Youssef", LastName: "Boubekri"})
-
-	} else {
-		c.JSON(200, Person{FirstName: "Youssef", LastName: "Boubekri"})
-
-	}
-}
-func params(c *gin.Context) {
-	param := c.Params.ByName("param")
-	c.JSON(200, gin.H{
-		"message": "hello " + param,
-	})
-}
 func main() {
 	router := gin.Default()
-	router.GET("/", index)
-	router.GET("/person", person)
-	router.GET("/person/:type", content)
-	router.GET("/:param", params)
-	router.Run("127.0.0.1:8080")
+	router.Run()
 }
