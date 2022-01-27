@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -85,10 +86,32 @@ func deleteRecipe(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Recipe deleted successfully"})
 }
 
+func searchRecipes(c *gin.Context) {
+	tag := c.Query("tag")
+	searchResult := make([]Recipe, 0)
+	found := false
+	for i := 0; i < len(recipes); i++ {
+		for _, t := range recipes[i].Tags {
+			if strings.EqualFold(tag, t) {
+				searchResult = append(searchResult, recipes[i])
+				found = true
+				break
+			}
+
+		}
+	}
+	if !found {
+		c.JSON(http.StatusNotFound, gin.H{"error": "no recipe was found"})
+	} else {
+		c.JSON(http.StatusOK, searchResult)
+	}
+}
+
 func main() {
 	router := gin.Default()
 	router.POST("/recipe", createRecipe)
 	router.GET("/recipes", getRecipes)
+	router.GET("/recipes/search", searchRecipes)
 	router.PUT("/recipe/:id", updateRecipe)
 	router.DELETE("/recipe/:id", deleteRecipe)
 	router.Run()
