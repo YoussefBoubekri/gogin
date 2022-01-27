@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -10,8 +12,8 @@ import (
 
 type Recipe struct {
 	ID            string    `json:"id"`
-	Name          string    `json:"Name"`
-	Tags          []string  `json:"Tags"`
+	Name          string    `json:"name"`
+	Tags          []string  `json:"tags"`
 	Ingredients   []string  `json:"Ingredients"`
 	Instructions  []string  `json:"Instructions"`
 	DatePublished time.Time `json:"DatePublished"`
@@ -21,6 +23,8 @@ var recipes []Recipe
 
 func init() {
 	recipes = make([]Recipe, 0)
+	file, _ := ioutil.ReadFile("recipes.json")
+	_ = json.Unmarshal([]byte(file), &recipes)
 }
 
 func createRecipe(c *gin.Context) {
@@ -37,8 +41,13 @@ func createRecipe(c *gin.Context) {
 	c.JSON(http.StatusOK, recipe)
 }
 
+func getRecipes(c *gin.Context) {
+	c.JSON(http.StatusOK, recipes)
+}
+
 func main() {
 	router := gin.Default()
 	router.POST("/recipe", createRecipe)
+	router.GET("/recipes", getRecipes)
 	router.Run()
 }

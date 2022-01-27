@@ -1,0 +1,44 @@
+[
+    {
+        "id": "c7p9t8is1s4511lqbrlg",
+        "name": "mozarella cakes",
+        "tags": [
+            "unhealthy",
+            "italian"
+        ],
+        "Ingredients": [
+            "mozarella",
+            "flour",
+            "eggs",
+            "potatoes"
+        ],
+        "Instructions": [
+            "cut",
+            "grate",
+            "dip",
+            "deep fry"
+        ],
+        "DatePublished": "2022-01-27T14:31:14.015503+01:00"
+    },
+    {
+        "id": "c7p9tjqs1s4511lqbrm0",
+        "name": "cheese cakes",
+        "tags": [
+            "fatty",
+            "american"
+        ],
+        "Ingredients": [
+            "cream cheese",
+            "sour cream",
+            "eggs",
+            "blueberries"
+        ],
+        "Instructions": [
+            "cut",
+            "grate",
+            "sweeten",
+            "deep freeze"
+        ],
+        "DatePublished": "2022-01-27T14:31:59.631048+01:00"
+    }
+]
