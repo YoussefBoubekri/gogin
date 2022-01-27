@@ -27,11 +27,32 @@ func init() {
 	_ = json.Unmarshal([]byte(file), &recipes)
 }
 
+func updateRecipe(c *gin.Context) {
+	var recipe Recipe
+	id := c.Params.ByName("id")
+	if err := c.ShouldBindJSON(&recipe); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	foundAt := -1
+	for i := 0; i < len(recipes); i++ {
+		if recipes[i].ID == id {
+			foundAt = i
+			break
+		}
+	}
+	if foundAt == -1 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "recipe not found"})
+		return
+	}
+	recipes[foundAt] = recipe
+	c.JSON(http.StatusOK, recipe)
+}
+
 func createRecipe(c *gin.Context) {
 	var recipe Recipe
 	if err := c.ShouldBindJSON(&recipe); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	guid := xid.New()
@@ -49,5 +70,6 @@ func main() {
 	router := gin.Default()
 	router.POST("/recipe", createRecipe)
 	router.GET("/recipes", getRecipes)
+	router.PUT("/recipe/:id", updateRecipe)
 	router.Run()
 }
